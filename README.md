@@ -14,3 +14,47 @@ export type VariantRecordTest =
   | { tag: "b", content: number }
   | { tag: "c", content: boolean };
 ```
+
+## Example
+
+The [tests](test/Main.purs) generate types and write them to a file, which is then checked with Typescript using [test/test.ts](test/test.ts):
+
+```hs
+type A =
+  { a :: Number
+  , b :: String
+  , c :: { d :: String }
+  , e :: Array String
+  , f :: Nullable String
+  }
+
+type VariantRecordTest = VariantRecord
+  ( a :: String
+  , b :: Number
+  , c :: Boolean
+  )
+
+generateTSFile :: _
+generateTSFile = writeTextFile UTF8 "./test/generated.ts" contents
+  where
+    contents = format defaultOptions $ intercalate "\n"
+      [ generateTS "A" (Proxy :: Proxy A)
+      , generateTS "VariantRecordTest" (Proxy :: Proxy VariantRecordTest)
+      ]
+```
+
+Generated types:
+
+```ts
+export type A = {
+  a: number,
+  b: string,
+  c: { d: string },
+  e: string[],
+  f: string | null
+};
+export type VariantRecordTest =
+  | { tag: "a", content: string }
+  | { tag: "b", content: number }
+  | { tag: "c", content: boolean };
+```
