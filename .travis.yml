@@ -1,0 +1,10 @@
+language: node_js
+sudo: required
+dist: trusty
+node_js: 8
+install:
+  - npm install -g bower purescript pulp
+script:
+  - bower install
+  - npm install
+  - pulp test

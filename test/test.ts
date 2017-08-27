@@ -20,17 +20,17 @@ const a2: Gen.A = {
   f: null
 };
 
-const fakeUnion1: Gen.FakeSumRecordTest = {
+const fakeUnion1: Gen.VariantRecordTest = {
   tag: "a",
   content: "asdf"
 };
 
-const fakeUnion2: Gen.FakeSumRecordTest = {
+const fakeUnion2: Gen.VariantRecordTest = {
   tag: "b",
   content: 123
 };
 
-const fakeUnion3: Gen.FakeSumRecordTest = {
+const fakeUnion3: Gen.VariantRecordTest = {
   tag: "c",
   content: true
 };

@@ -39,7 +39,7 @@ main = run [consoleReporter] do
       it "can generate types" do
         liftEff generateTSFile
     describe "VariantRecord" do
-      it "correclty roundtrips to variant" do
+      it "correctly roundtrips to variant" do
         let vr = VariantRecord {tag: "a", content: toForeign "asdf"} :: VariantRecordTest
         let result = overVariant f vr
         eqVariants vr result
