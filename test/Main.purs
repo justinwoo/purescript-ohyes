@@ -5,6 +5,7 @@ import Prelude
 import Control.Monad.Eff.Class (liftEff)
 import Data.Foldable (intercalate)
 import Data.Foreign (Foreign, toForeign, unsafeFromForeign)
+import Data.Function.Uncurried (Fn2)
 import Data.Nullable (Nullable)
 import Data.Variant (default, inj, on)
 import Node.Encoding (Encoding(..))
@@ -24,6 +25,9 @@ type A =
   , c :: { d :: String }
   , e :: Array String
   , f :: Nullable String
+  , g :: Number -> Number -> Number
+  , h :: Fn2 Number Number Number
+  , i :: Fn2 Number (Fn2 Number Number Number) Number
   }
 
 type VariantRecordTest = VariantRecord

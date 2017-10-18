@@ -26,6 +26,9 @@ type A =
   , c :: { d :: String }
   , e :: Array String
   , f :: Nullable String
+  , g :: Number -> Number -> Number
+  , h :: Fn2 Number Number Number
+  , i :: Fn2 Number (Fn2 Number Number Number) Number
   }
 
 type VariantRecordTest = VariantRecord
@@ -51,7 +54,10 @@ export type A = {
   b: string,
   c: { d: string },
   e: string[],
-  f: string | null
+  f: string | null,
+  g: (a: number) => (a: number) => number,
+  h: (a: number, b: number) => number,
+  i: (a: number, b: (a: number, b: number) => number) => number
 };
 export type VariantRecordTest =
   | { tag: "a", content: string }

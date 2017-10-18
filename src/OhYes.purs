@@ -4,6 +4,7 @@ import Prelude
 
 import Data.Foldable (intercalate)
 import Data.Foreign (Foreign)
+import Data.Function.Uncurried (Fn2)
 import Data.List (List, (:))
 import Data.Monoid (mempty)
 import Data.Nullable (Nullable)
@@ -85,6 +86,29 @@ instance arrayHasTSRep ::
   toTSRep _ = toTSRep p <> "[]"
     where
       p = Proxy :: Proxy a
+
+instance functionHasTSRep ::
+  ( HasTSRep a
+  , HasTSRep b
+  ) => HasTSRep (Function a b) where
+  toTSRep _ = "(a: " <> a <> ") => " <> b
+    where
+      a = toTSRep (Proxy :: Proxy a)
+      b = toTSRep (Proxy :: Proxy b)
+
+instance fn2HasTSRep ::
+  ( HasTSRep a
+  , HasTSRep b
+  , HasTSRep c
+  ) => HasTSRep (Fn2 a b c) where
+  toTSRep _ =
+      "(a: " <> a <>
+      ", b: " <> b <>
+      ") => " <> c
+    where
+      a = toTSRep (Proxy :: Proxy a)
+      b = toTSRep (Proxy :: Proxy b)
+      c = toTSRep (Proxy :: Proxy c)
 
 instance recordHasTSRep ::
   ( RowToList row rl

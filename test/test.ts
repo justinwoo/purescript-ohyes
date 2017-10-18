@@ -7,7 +7,10 @@ const a1: Gen.A = {
     d: "asdf"
   },
   e: ["asdf"],
-  f: "asdf"
+  f: "asdf",
+  g: a => b => a + b,
+  h: (a, b) => a,
+  i: (a, b) => a
 };
 
 const a2: Gen.A = {
@@ -17,7 +20,10 @@ const a2: Gen.A = {
     d: "asdf"
   },
   e: ["asdf"],
-  f: null
+  f: null,
+  g: a => b => a - b,
+  h: (a, b) => a,
+  i: (a, b) => a
 };
 
 const fakeUnion1: Gen.VariantRecordTest = {
