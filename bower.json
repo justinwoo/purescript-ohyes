@@ -12,19 +12,19 @@
     "url": "git://github.com/justinwoo/purescript-ohyes.git"
   },
   "dependencies": {
-    "purescript-prelude": "^3.1.0",
+    "purescript-prelude": "^3.1.1",
     "purescript-console": "^3.0.0",
-    "purescript-typelevel-prelude": "^2.4.0",
-    "purescript-record": "^0.2.0",
-    "purescript-generics-rep": "^5.2.0",
-    "purescript-lists": "^4.9.0",
+    "purescript-typelevel-prelude": "^2.5.0",
+    "purescript-record": "^0.2.3",
+    "purescript-generics-rep": "^5.3.0",
+    "purescript-lists": "^4.11.0",
     "purescript-nullable": "^3.0.0",
-    "purescript-variant": "^3.2.1"
+    "purescript-variant": "^4.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0",
-    "purescript-prettier": "^0.0.2",
-    "purescript-node-fs-aff": "^4.0.0",
-    "purescript-spec": "^1.0.0"
+    "purescript-prettier": "^0.1.0",
+    "purescript-node-fs-aff": "^5.0.0",
+    "purescript-spec": "^2.0.0"
   }
 }

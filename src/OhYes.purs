@@ -28,37 +28,6 @@ generateTS name _ = "export type " <> name <> " = " <> ty
     p = Proxy :: Proxy a
     ty = toTSRep p
 
--- | VariantRecord to represent a union of records of string literal "tag" and dependently-typed "content".
-newtype VariantRecord (pairings :: # Type) = VariantRecord
-  { tag :: String
-  , content :: Foreign
-  }
-
--- | A function to apply a function on the Variant form of the VariantRecord.
-overVariant :: forall row
-   . (Variant row -> Variant row)
-  -> VariantRecord row
-  -> VariantRecord row
-overVariant f vr = fromVariant <<< f $ toVariant vr
-
-toVariant :: forall row
-   . VariantRecord row
-  -> Variant row
-toVariant (VariantRecord {tag, content}) = coerceToVariant $ Tuple tag content
-  where
-    -- coerces to Variant's internal rep
-    coerceToVariant :: forall a. Tuple String a -> Variant row
-    coerceToVariant = unsafeCoerce
-
-fromVariant :: forall row
-   . Variant row
-  -> VariantRecord row
-fromVariant v = VariantRecord <<< uncurry {tag: _, content: _} $ coerceFromVariant v
-  where
-    -- coerces from Variant's internal rep
-    coerceFromVariant :: Variant row -> Tuple String Foreign
-    coerceFromVariant = unsafeCoerce
-
 -- | Our main type class for types that can be represented in Typescript types without conversion. You may want to using newtype instance deriving for this class for your newtypes, but any other types should be tested for correctness.
 class HasTSRep a where
   toTSRep :: Proxy a -> String
@@ -140,10 +109,14 @@ instance consHasTSRepFields ::
 instance nilHasTSRepFields :: HasTSRepFields Nil where
   toTSRepFields _ = mempty
 
+-- | a Variant is represented by VariantRep, which is a newtype record of
+-- | `newtype VariantRep a = VariantRep { type ∷ String , value ∷ a }`
+-- | as seen here:
+-- | https://github.com/natefaubion/purescript-variant/blob/aef507e2972d294ecd735575371eccbc61ac1ac4/src/Data/Variant/Internal.purs#L31
 instance fakeSumRecordHasTSRep ::
   ( RowToList row rl
   , FakeSumRecordMembers rl
-  ) => HasTSRep (VariantRecord row) where
+  ) => HasTSRep (Variant row) where
   toTSRep _ = intercalate "|" members
     where
       rlp = RLProxy :: RLProxy rl
@@ -163,7 +136,7 @@ instance consFakeSumRecordMembers ::
       key = reflectSymbol namep
       typ = Proxy :: Proxy ty
       val = toTSRep typ
-      head = "{tag:\"" <> key <> "\", content:" <> val <> "}"
+      head = "{type:\"" <> key <> "\", value:" <> val <> "}"
       tailp = RLProxy :: RLProxy tail
       tail = toFakeSumRecordMembers tailp
 

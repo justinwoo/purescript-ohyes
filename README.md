@@ -6,13 +6,13 @@ A library for generating Typescript types that can be used transparently from Pu
 
 ![](http://i.imgur.com/ZlX0iGz.png)
 
-This library also provides ways for working with typical union type forms of records with a discriminant field by providing a `VariantRecord` structure that generates types in the following form:
+This library also provides ways for working with typical union type forms of records with a discriminant field by using [Variant](https://github.com/natefaubion/purescript-variant), which uses a record representation with a string literal `type` field and the associated `value` field.
 
 ```ts
-export type VariantRecordTest =
-  | { tag: "a", content: string }
-  | { tag: "b", content: number }
-  | { tag: "c", content: boolean };
+export type VariantTest =
+  | { type: "a", value: string }
+  | { type: "b", value: number }
+  | { type: "c", value: boolean };
 ```
 
 ## Example
@@ -31,18 +31,18 @@ type A =
   , i :: Fn2 Number (Fn2 Number Number Number) Number
   }
 
-type VariantRecordTest = VariantRecord
+type VariantTest = Variant
   ( a :: String
   , b :: Number
   , c :: Boolean
   )
 
 generateTSFile :: _
-generateTSFile = writeTextFile UTF8 "./test/generated.ts" contents
+generateTSFile = writeTextFile UTF8 "./test/generated.ts" values
   where
-    contents = format defaultOptions $ intercalate "\n"
+    values = format defaultOptions $ intercalate "\n"
       [ generateTS "A" (Proxy :: Proxy A)
-      , generateTS "VariantRecordTest" (Proxy :: Proxy VariantRecordTest)
+      , generateTS "VariantTest" (Proxy :: Proxy VariantTest)
       ]
 ```
 
@@ -59,8 +59,8 @@ export type A = {
   h: (a: number, b: number) => number,
   i: (a: number, b: (a: number, b: number) => number) => number
 };
-export type VariantRecordTest =
-  | { tag: "a", content: string }
-  | { tag: "b", content: number }
-  | { tag: "c", content: boolean };
+export type VariantTest =
+  | { type: "a", value: string }
+  | { type: "b", value: number }
+  | { type: "c", value: boolean };
 ```

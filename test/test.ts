@@ -26,17 +26,17 @@ const a2: Gen.A = {
   i: (a, b) => a
 };
 
-const fakeUnion1: Gen.VariantRecordTest = {
-  tag: "a",
-  content: "asdf"
+const fakeUnion1: Gen.VariantTest = {
+  type: "a",
+  value: "asdf"
 };
 
-const fakeUnion2: Gen.VariantRecordTest = {
-  tag: "b",
-  content: 123
+const fakeUnion2: Gen.VariantTest = {
+  type: "b",
+  value: 123
 };
 
-const fakeUnion3: Gen.VariantRecordTest = {
-  tag: "c",
-  content: true
+const fakeUnion3: Gen.VariantTest = {
+  type: "c",
+  value: true
 };
