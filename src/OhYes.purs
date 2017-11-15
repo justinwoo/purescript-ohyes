@@ -3,17 +3,16 @@ module OhYes where
 import Prelude
 
 import Data.Foldable (intercalate)
-import Data.Foreign (Foreign)
+
 import Data.Function.Uncurried (Fn2)
 import Data.List (List, (:))
 import Data.Monoid (mempty)
 import Data.Nullable (Nullable)
-import Data.Tuple (Tuple(..), uncurry)
+
 import Data.Variant (Variant)
 import Type.Prelude (class IsSymbol, SProxy(..), reflectSymbol)
 import Type.Proxy (Proxy(..))
 import Type.Row (class RowToList, Cons, Nil, RLProxy(..), kind RowList)
-import Unsafe.Coerce (unsafeCoerce)
 
 -- | identity function for applying the HasTSRep constraint
 toTS :: forall a. HasTSRep a => a -> a
