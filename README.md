@@ -64,3 +64,5 @@ export type VariantTest =
   | { type: "b", value: number }
   | { type: "c", value: boolean };
 ```
+
+See the additional example here: https://github.com/justinwoo/ohyes-demo
