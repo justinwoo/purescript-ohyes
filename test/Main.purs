@@ -2,11 +2,12 @@ module Test.Main where
 
 import Prelude
 
-import Control.Monad.Eff.Class (liftEff)
 import Data.Foldable (intercalate)
 import Data.Function.Uncurried (Fn2)
 import Data.Nullable (Nullable)
 import Data.Variant (Variant)
+import Effect (Effect)
+import Effect.Class (liftEffect)
 import Node.Encoding (Encoding(..))
 import Node.FS.Sync (writeTextFile)
 import OhYes (generateTS)
@@ -33,14 +34,14 @@ type VariantTest = Variant
   , c :: Boolean
   )
 
-main :: _
+main :: Effect Unit
 main = run [consoleReporter] do
   describe "purescript-ohyes" do
     describe "codegen" do
       it "can generate types" do
-        liftEff generateTSFile
+        liftEffect generateTSFile
 
-generateTSFile :: _
+generateTSFile :: Effect Unit
 generateTSFile = writeTextFile UTF8 "./test/generated.ts" values
   where
     values = format defaultOptions $ intercalate "\n"

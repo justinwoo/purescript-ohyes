@@ -3,20 +3,18 @@ module OhYes where
 import Prelude
 
 import Data.Foldable (intercalate)
-
 import Data.Function.Uncurried (Fn2)
 import Data.List (List, (:))
-import Data.Monoid (mempty)
 import Data.Nullable (Nullable)
-
 import Data.Variant (Variant)
+import HasJSRep (class HasJSRep, class MembersHaveJSRep)
+import Prim.RowList as RL
 import Type.Prelude (class IsSymbol, SProxy(..), reflectSymbol)
 import Type.Proxy (Proxy(..))
-import Type.Row (class RowToList, Cons, Nil, RLProxy(..), kind RowList)
+import Type.Row (RLProxy(..), kind RowList)
 
--- | identity function for applying the HasTSRep constraint
 toTS :: forall a. HasTSRep a => a -> a
-toTS = id
+toTS = identity
 
 -- | Generate Typescript type signatures for a given type, supplying a name to use as the type name
 generateTS :: forall a
@@ -28,7 +26,7 @@ generateTS name _ = "export type " <> name <> " = " <> ty
     ty = toTSRep p
 
 -- | Our main type class for types that can be represented in Typescript types without conversion. You may want to using newtype instance deriving for this class for your newtypes, but any other types should be tested for correctness.
-class HasTSRep a where
+class HasJSRep a <= HasTSRep a where
   toTSRep :: Proxy a -> String
 
 instance numberHasTSRep :: HasTSRep Number where
@@ -79,7 +77,8 @@ instance fn2HasTSRep ::
       c = toTSRep (Proxy :: Proxy c)
 
 instance recordHasTSRep ::
-  ( RowToList row rl
+  ( RL.RowToList row  rl
+  , MembersHaveJSRep rl
   , HasTSRepFields rl
   ) => HasTSRep (Record row) where
   toTSRep _ = "{" <> fields <> "}"
@@ -94,7 +93,7 @@ instance consHasTSRepFields ::
   ( HasTSRepFields tail
   , IsSymbol name
   , HasTSRep ty
-  ) => HasTSRepFields (Cons name ty tail) where
+  ) => HasTSRepFields (RL.Cons name ty tail) where
   toTSRepFields _ = head : tail
     where
       namep = SProxy :: SProxy name
@@ -105,7 +104,7 @@ instance consHasTSRepFields ::
       tailp = RLProxy :: RLProxy tail
       tail = toTSRepFields tailp
 
-instance nilHasTSRepFields :: HasTSRepFields Nil where
+instance nilHasTSRepFields :: HasTSRepFields RL.Nil where
   toTSRepFields _ = mempty
 
 -- | a Variant is represented by VariantRep, which is a newtype record of
@@ -113,7 +112,8 @@ instance nilHasTSRepFields :: HasTSRepFields Nil where
 -- | as seen here:
 -- | https://github.com/natefaubion/purescript-variant/blob/aef507e2972d294ecd735575371eccbc61ac1ac4/src/Data/Variant/Internal.purs#L31
 instance fakeSumRecordHasTSRep ::
-  ( RowToList row rl
+  ( RL.RowToList row rl
+  , MembersHaveJSRep rl
   , FakeSumRecordMembers rl
   ) => HasTSRep (Variant row) where
   toTSRep _ = intercalate "|" members
@@ -128,7 +128,7 @@ instance consFakeSumRecordMembers ::
   ( FakeSumRecordMembers tail
   , IsSymbol name
   , HasTSRep ty
-  ) => FakeSumRecordMembers (Cons name ty tail) where
+  ) => FakeSumRecordMembers (RL.Cons name ty tail) where
   toFakeSumRecordMembers _ = head : tail
     where
       namep = SProxy :: SProxy name
@@ -139,5 +139,5 @@ instance consFakeSumRecordMembers ::
       tailp = RLProxy :: RLProxy tail
       tail = toFakeSumRecordMembers tailp
 
-instance nilFakeSumRecordMembers :: FakeSumRecordMembers Nil where
+instance nilFakeSumRecordMembers :: FakeSumRecordMembers RL.Nil where
   toFakeSumRecordMembers _ = mempty
