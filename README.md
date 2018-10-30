@@ -4,6 +4,10 @@
 
 A library for generating Typescript types that can be used transparently from Purescript.
 
+See the blog post here: <https://github.com/justinwoo/my-blog-posts#you-can-interop-with-typescript-using-purescript-ohyes>
+
+This is likely not the "silver bullet" that you are looking for, but can give you some good ideas on how to get going.
+
 ![](http://i.imgur.com/ZlX0iGz.png)
 
 This library also provides ways for working with typical union type forms of records with a discriminant field by using [Variant](https://github.com/natefaubion/purescript-variant), which uses a record representation with a string literal `type` field and the associated `value` field.
