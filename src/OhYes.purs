@@ -11,7 +11,7 @@ import HasJSRep (class HasJSRep, class MembersHaveJSRep)
 import Prim.RowList as RL
 import Type.Prelude (class IsSymbol, SProxy(..), reflectSymbol)
 import Type.Proxy (Proxy(..))
-import Type.Row (RLProxy(..), kind RowList)
+import Type.Data.RowList (RLProxy(..))
 
 toTS :: forall a. HasTSRep a => a -> a
 toTS = identity
@@ -86,7 +86,7 @@ instance recordHasTSRep ::
       rlp = RLProxy :: RLProxy rl
       fields = intercalate "," $ toTSRepFields rlp
 
-class HasTSRepFields (rl :: RowList) where
+class HasTSRepFields (rl :: RL.RowList) where
   toTSRepFields :: RLProxy rl -> List String
 
 instance consHasTSRepFields ::
@@ -121,7 +121,7 @@ instance fakeSumRecordHasTSRep ::
       rlp = RLProxy :: RLProxy rl
       members = toFakeSumRecordMembers rlp
 
-class FakeSumRecordMembers (rl :: RowList) where
+class FakeSumRecordMembers (rl :: RL.RowList) where
   toFakeSumRecordMembers :: RLProxy rl -> List String
 
 instance consFakeSumRecordMembers ::
